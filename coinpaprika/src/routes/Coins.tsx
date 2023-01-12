@@ -54,8 +54,6 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-const CoinWrapper = styled.div``;
-
 export default function Coins() {
   const [coins, setCoins] = useState<CoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +70,7 @@ export default function Coins() {
   return (
     <Container>
       <Header>
-        <Title>coin</Title>
+        <Title>Coin</Title>
       </Header>
       {loading ? (
         <Loader>...Loading</Loader>

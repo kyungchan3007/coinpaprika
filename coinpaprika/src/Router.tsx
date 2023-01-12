@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Coin from "./routes/Coin";
 import Coins from "./routes/Coins";
-
+import Price from "./routes/Price";
 export default function Router() {
   return (
     <BrowserRouter>
@@ -12,6 +12,9 @@ export default function Router() {
         <Route path={"/"}>
           <Coins></Coins>
         </Route>
+        {/* <Route path={"/"}>
+          <Price />
+        </Route> */}
       </Switch>
     </BrowserRouter>
   );
