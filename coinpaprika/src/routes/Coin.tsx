@@ -11,6 +11,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "../Api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -109,35 +111,42 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 export default function Coin() {
   const { coinId } = useParams<CoinParam>();
-  const [loading, setLoading] = useState(true);
-  const { state } = useLocation<RouteState>();
-  const [info, setInfo] = useState<IInfodata>();
-  const [priceInfo, setPriceInfo] = useState<IPriceData>();
+  // const [loading, setLoading] = useState(true);
   const priceMatch = useRouteMatch("/:coinId/price"); // Url이 있는지 검사
   const chartMatch = useRouteMatch("/:coinId/chart");
-  console.log(priceMatch !== null);
-  useEffect(() => {
-    (async () => {
-      const response = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
+  const { isLoading: infoLoading, data: infoData } = useQuery<IInfodata>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: tickersLoading, data: tickerData } = useQuery<IPriceData>(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId)
+  );
+  const { state } = useLocation<RouteState>();
+  // const [info, setInfo] = useState<IInfodata>();
+  // const [priceInfo, setPriceInfo] = useState<IPriceData>();
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await (
+  //       await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+  //     ).json();
 
-      const priceDate = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
+  //     const priceDate = await (
+  //       await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+  //     ).json();
 
-      setInfo(response);
-      setPriceInfo(priceDate);
-      setLoading(false);
-    })();
-  }, [coinId]);
-
+  //     setInfo(response);
+  //     setPriceInfo(priceDate);
+  //     setLoading(false);
+  //   })();
+  // }, [coinId]);
+  const loading = infoLoading || tickersLoading;
   return (
     <>
       <Container>
         <Header>
           <Title>
-            {state?.name ? state.name : loading ? "Loading..." : info?.name}
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
           </Title>
         </Header>
 
@@ -148,28 +157,28 @@ export default function Coin() {
             <Overiew>
               <OveriewItem>
                 Rank
-                <span>{info?.rank}</span>
+                <span>{infoData?.rank}</span>
               </OveriewItem>
               <OveriewItem2>
                 Symbol
                 <Img
-                  src={`https://coinicons-api.vercel.app/api/icon/${info?.symbol.toLocaleLowerCase()}`}
+                  src={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLocaleLowerCase()}`}
                 />
               </OveriewItem2>
               <OveriewItem3>
                 Open Source
-                <span>{info?.open_source ? "YES" : "NO"}</span>
+                <span>{infoData?.open_source ? "YES" : "NO"}</span>
               </OveriewItem3>
             </Overiew>
-            <Description>{info?.description}</Description>
+            <Description>{infoData?.description}</Description>
             <Overiew>
               <OveriewItem>
                 Total Suply
-                <span>{priceInfo?.total_supply}</span>
+                <span>{tickerData?.total_supply}</span>
               </OveriewItem>
               <OveriewItem3>
                 Max Supply
-                <span>{priceInfo?.max_supply}</span>
+                <span>{tickerData?.max_supply}</span>
               </OveriewItem3>
             </Overiew>
             <Tabs>

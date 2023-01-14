@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoin } from "../api";
+import { fetchCoins } from "../Api";
 import { CoinInterface } from "../type/CoinType";
 
 const Title = styled.h1`
@@ -68,7 +68,8 @@ export default function Coins() {
   //     setLoading(false);
   //   })();
   // }, []);
-  const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoin);
+  //리엑트 쿼리는 데이터를 캐시에 저장해두기 때문에 리렌더링 하지 않아도 데이터를 가져올수 있따
+  const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
   return (
     <Container>
       <Header>
