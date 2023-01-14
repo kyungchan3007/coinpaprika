@@ -3,7 +3,8 @@ import {
   Switch,
   useLocation,
   useParams,
-  BrowserRouter,
+  useRouteMatch,
+  Link,
 } from "react-router-dom";
 import { CoinParam, RouteState, IInfodata, IPriceData } from "../type/CoinType";
 import styled from "styled-components";
@@ -83,13 +84,38 @@ const Description = styled.p`
   align-items: center;
 `;
 
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+
 export default function Coin() {
   const { coinId } = useParams<CoinParam>();
   const [loading, setLoading] = useState(true);
   const { state } = useLocation<RouteState>();
   const [info, setInfo] = useState<IInfodata>();
   const [priceInfo, setPriceInfo] = useState<IPriceData>();
-
+  const priceMatch = useRouteMatch("/:coinId/price"); // Url이 있는지 검사
+  const chartMatch = useRouteMatch("/:coinId/chart");
+  console.log(priceMatch !== null);
   useEffect(() => {
     (async () => {
       const response = await (
@@ -105,7 +131,7 @@ export default function Coin() {
       setLoading(false);
     })();
   }, [coinId]);
-  console.log(loading);
+
   return (
     <>
       <Container>
@@ -146,16 +172,23 @@ export default function Coin() {
                 <span>{priceInfo?.max_supply}</span>
               </OveriewItem3>
             </Overiew>
-            <BrowserRouter>
-              <Switch>
-                <Route path={`/${coinId}/price`}>
-                  <Price />
-                </Route>
-                <Route path={`/${coinId}/chart`}>
-                  <Chart />
-                </Route>
-              </Switch>
-            </BrowserRouter>
+            <Tabs>
+              <Tab isActive={chartMatch !== null}>
+                <Link to={`/${coinId}/chart`}>Chart</Link>
+              </Tab>
+              <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}>Price</Link>
+              </Tab>
+            </Tabs>
+
+            <Switch>
+              <Route path={`/:coinId/price`}>
+                <Price />
+              </Route>
+              <Route path={`/:coinId/chart`}>
+                <Chart />
+              </Route>
+            </Switch>
           </>
         )}
       </Container>

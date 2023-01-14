@@ -12,9 +12,6 @@ export default function Router() {
         <Route path={"/"}>
           <Coins></Coins>
         </Route>
-        {/* <Route path={"/"}>
-          <Price />
-        </Route> */}
       </Switch>
     </BrowserRouter>
   );
