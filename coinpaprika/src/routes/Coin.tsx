@@ -110,12 +110,14 @@ const Tab = styled.span<{ isActive: boolean }>`
 `;
 
 export default function Coin() {
-  const { coinId } = useParams<CoinParam>();
+  const { coinId } = useParams<CoinParam>(); //url 파라메터 부분을 캐치 하고 싶을때
+  const data = useParams<CoinParam>();
+  console.log(data, "sdf");
   // const [loading, setLoading] = useState(true);
   const priceMatch = useRouteMatch("/:coinId/price"); // Url이 있는지 검사
   const chartMatch = useRouteMatch("/:coinId/chart");
   const { isLoading: infoLoading, data: infoData } = useQuery<IInfodata>(
-    ["info", coinId],
+    ["info", coinId], //배열을 만들어서 고유ID 부여
     () => fetchCoinInfo(coinId)
   );
   const { isLoading: tickersLoading, data: tickerData } = useQuery<IPriceData>(
@@ -123,6 +125,7 @@ export default function Coin() {
     () => fetchCoinTickers(coinId)
   );
   const { state } = useLocation<RouteState>();
+
   // const [info, setInfo] = useState<IInfodata>();
   // const [priceInfo, setPriceInfo] = useState<IPriceData>();
   // useEffect(() => {
@@ -192,10 +195,10 @@ export default function Coin() {
 
             <Switch>
               <Route path={`/:coinId/price`}>
-                <Price />
+                <Price coinId={coinId} />
               </Route>
               <Route path={`/:coinId/chart`}>
-                <Chart />
+                <Chart coinId={coinId} />
               </Route>
             </Switch>
           </>

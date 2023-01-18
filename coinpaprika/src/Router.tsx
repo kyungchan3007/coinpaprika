@@ -7,6 +7,8 @@ export default function Router() {
     <BrowserRouter>
       <Switch>
         <Route path="/:coinId">
+          {" "}
+          {/* 코인 페이지에서 useParam 으로 파라메터값인 coinId를 잡을수 있다*/}
           <Coin />
         </Route>
         <Route path={"/"}>
