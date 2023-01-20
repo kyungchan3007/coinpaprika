@@ -77,3 +77,14 @@ export interface IPriceData {
     };
   };
 }
+
+export interface ICoinHistory {
+  close: string;
+  high: string;
+  low: string;
+  market_cap: number;
+  open: string;
+  time_close: number;
+  time_open: number;
+  volume: string;
+}
