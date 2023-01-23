@@ -4,6 +4,8 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "./theme";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { isDarkAtome } from "./atoms";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Andika&family=Inter:wght@300;400&family=Mukta&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -68,9 +70,7 @@ table {
 `;
 
 export default function App() {
-  const [Dark, setDark] = useState(false);
-  const toggleDark = () => setDark((prev) => !prev);
-
+  const isDark = useRecoilValue(isDarkAtome);
   // const countNumner = () => {
   //   setCount((prev) => prev + 1);
   //   console.log(count);
@@ -79,9 +79,9 @@ export default function App() {
   //state 를 사용학기 위해서 themeProvider를 index에서 옮겨왔다.
   return (
     <>
-      <ThemeProvider theme={Dark ? darkTheme : lightTheme}>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
-        <Router dark={Dark} toggleDark={toggleDark} />
+        <Router />
         <ReactQueryDevtools initialIsOpen={true} />
       </ThemeProvider>
     </>

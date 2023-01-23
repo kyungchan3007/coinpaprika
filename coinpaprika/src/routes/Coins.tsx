@@ -2,8 +2,9 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "../Api";
-import { CoinInterface, IToogleClick, ICoinsClick } from "../type/CoinType";
+import { CoinInterface, IToogleClick } from "../type/CoinType";
 import { Helmet } from "react-helmet";
+
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 48px;
@@ -55,7 +56,7 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-export default function Coins(props: IToogleClick) {
+export default function Coins() {
   // const [coins, setCoins] = useState<CoinInterface[]>([]);
   // const [loading, setLoading] = useState(true);
 
@@ -76,7 +77,6 @@ export default function Coins(props: IToogleClick) {
       </Helmet>
       <Header>
         <Title>Coin</Title>
-        <button onClick={props.toggleDark}>Dark Mode</button>
       </Header>
       {isLoading ? (
         <Loader>...Loading</Loader>

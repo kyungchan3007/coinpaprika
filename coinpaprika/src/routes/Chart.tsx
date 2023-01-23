@@ -2,13 +2,15 @@ import { useQuery } from "react-query";
 import { ICoinHistory } from "../type/CoinType";
 import { fetchCoinHistory } from "../Api";
 import ApexChart from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { isDarkAtome } from "../atoms";
 
 interface CoinChart {
   coinId: string;
-  dark?: boolean;
 }
 
 export default function Carht(props: CoinChart) {
+  const isDark = useRecoilValue(isDarkAtome);
   const { isLoading, data } = useQuery<ICoinHistory[]>(
     ["ohlcv", props.coinId], // 배열을 만들어서 고유ID 부여
     () => fetchCoinHistory(props.coinId)
@@ -30,7 +32,7 @@ export default function Carht(props: CoinChart) {
             ]}
             options={{
               theme: {
-                mode: props.dark ? "dark" : "light",
+                mode: isDark ? "dark" : "light",
               },
               stroke: {
                 curve: "smooth",

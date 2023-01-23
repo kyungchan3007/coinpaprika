@@ -93,9 +93,4 @@ export interface ICoinHistory {
 
 export interface IToogleClick {
   toggleDark?: () => void;
-  dark?: boolean;
-}
-
-export interface ICoinsClick {
-  toggleDark: () => void;
 }
