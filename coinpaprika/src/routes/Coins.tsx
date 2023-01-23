@@ -2,8 +2,10 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "../Api";
-import { CoinInterface, IToogleClick } from "../type/CoinType";
+import { CoinInterface } from "../type/CoinType";
 import { Helmet } from "react-helmet";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtome } from "../atoms";
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
@@ -70,6 +72,9 @@ export default function Coins() {
   // }, []);
   //리엑트 쿼리는 데이터를 캐시에 저장해두기 때문에 리렌더링 하지 않아도 데이터를 가져올수 있따
   const { isLoading, data } = useQuery<CoinInterface[]>("allCoins", fetchCoins);
+  const setRecoilState = useSetRecoilState(isDarkAtome);
+  const darkModeState = () => setRecoilState((prev) => !prev);
+  const dark = useRecoilValue(isDarkAtome);
   return (
     <Container>
       <Helmet>
@@ -77,6 +82,9 @@ export default function Coins() {
       </Helmet>
       <Header>
         <Title>Coin</Title>
+        <button onClick={darkModeState}>
+          {dark ? "LightMode" : "DarkMode"}
+        </button>
       </Header>
       {isLoading ? (
         <Loader>...Loading</Loader>
