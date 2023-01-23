@@ -8,11 +8,12 @@ import {
 } from "react-router-dom";
 import { CoinParam, RouteState, IInfodata, IPriceData } from "../type/CoinType";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+
 import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../Api";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -111,8 +112,8 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 export default function Coin() {
   const { coinId } = useParams<CoinParam>(); //url 파라메터 부분을 캐치 하고 싶을때
-  const data = useParams<CoinParam>();
-  console.log(data, "sdf");
+  // const data = useParams<CoinParam>();
+
   // const [loading, setLoading] = useState(true);
   const priceMatch = useRouteMatch("/:coinId/price"); // Url이 있는지 검사
   const chartMatch = useRouteMatch("/:coinId/chart");
@@ -122,8 +123,12 @@ export default function Coin() {
   );
   const { isLoading: tickersLoading, data: tickerData } = useQuery<IPriceData>(
     ["tickers", coinId],
-    () => fetchCoinTickers(coinId)
+    () => fetchCoinTickers(coinId),
+    {
+      refetchInterval: 5000, // 리패치 쿼리 실시간으로 정보 업데이트
+    }
   );
+
   const { state } = useLocation<RouteState>();
 
   // const [info, setInfo] = useState<IInfodata>();
@@ -144,15 +149,25 @@ export default function Coin() {
   //   })();
   // }, [coinId]);
   const loading = infoLoading || tickersLoading;
+
   return (
     <>
       <Container>
+        <Helmet>
+          <title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </title>
+          {/* <link
+            rel="icon"
+            type="image/png"
+            href={`https://coinicons-api.vercel.app/api/icon/${infoData?.symbol.toLocaleLowerCase()}`}
+          /> */}
+        </Helmet>
         <Header>
           <Title>
             {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
           </Title>
         </Header>
-
         {loading ? (
           <Loader>...Loading</Loader>
         ) : (
@@ -169,8 +184,8 @@ export default function Coin() {
                 />
               </OveriewItem2>
               <OveriewItem3>
-                Open Source
-                <span>{infoData?.open_source ? "YES" : "NO"}</span>
+                Price:
+                <span>${tickerData?.quotes?.USD?.price.toFixed(2)}</span>
               </OveriewItem3>
             </Overiew>
             <Description>{infoData?.description}</Description>

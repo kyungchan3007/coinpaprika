@@ -1,6 +1,3 @@
-import { useParams } from "react-router-dom";
-import { CoinParam } from "./type/CoinType";
-
 const BASE_URL = `https://api.coinpaprika.com/v1`;
 
 export function fetchCoins() {
