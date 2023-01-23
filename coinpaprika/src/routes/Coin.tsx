@@ -6,7 +6,13 @@ import {
   useRouteMatch,
   Link,
 } from "react-router-dom";
-import { CoinParam, RouteState, IInfodata, IPriceData } from "../type/CoinType";
+import {
+  CoinParam,
+  RouteState,
+  IInfodata,
+  IPriceData,
+  IToogleClick,
+} from "../type/CoinType";
 import styled from "styled-components";
 
 import Price from "./Price";
@@ -110,7 +116,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-export default function Coin() {
+export default function Coin(props: IToogleClick) {
   const { coinId } = useParams<CoinParam>(); //url 파라메터 부분을 캐치 하고 싶을때
   // const data = useParams<CoinParam>();
 
@@ -213,7 +219,7 @@ export default function Coin() {
                 <Price coinId={coinId} />
               </Route>
               <Route path={`/:coinId/chart`}>
-                <Chart coinId={coinId} />
+                <Chart dark={props.dark} coinId={coinId} />
               </Route>
             </Switch>
           </>

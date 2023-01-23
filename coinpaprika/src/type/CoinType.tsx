@@ -90,3 +90,12 @@ export interface ICoinHistory {
   time_open: number;
   volume: string;
 }
+
+export interface IToogleClick {
+  toggleDark?: () => void;
+  dark?: boolean;
+}
+
+export interface ICoinsClick {
+  toggleDark: () => void;
+}

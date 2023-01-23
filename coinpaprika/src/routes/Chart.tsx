@@ -5,6 +5,7 @@ import ApexChart from "react-apexcharts";
 
 interface CoinChart {
   coinId: string;
+  dark?: boolean;
 }
 
 export default function Carht(props: CoinChart) {
@@ -29,7 +30,7 @@ export default function Carht(props: CoinChart) {
             ]}
             options={{
               theme: {
-                mode: "dark",
+                mode: props.dark ? "dark" : "light",
               },
               stroke: {
                 curve: "smooth",

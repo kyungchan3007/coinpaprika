@@ -1,7 +1,9 @@
 import Router from "./Router";
 import { createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
-
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./theme";
+import { useState } from "react";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Andika&family=Inter:wght@300;400&family=Mukta&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -66,11 +68,22 @@ table {
 `;
 
 export default function App() {
+  const [Dark, setDark] = useState(false);
+  const toggleDark = () => setDark((prev) => !prev);
+
+  // const countNumner = () => {
+  //   setCount((prev) => prev + 1);
+  //   console.log(count);
+  // };
+
+  //state 를 사용학기 위해서 themeProvider를 index에서 옮겨왔다.
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ThemeProvider theme={Dark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Router dark={Dark} toggleDark={toggleDark} />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }
