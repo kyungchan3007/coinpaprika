@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { fetchCoins } from "../Api";
 import { CoinInterface } from "../type/CoinType";
 import { Helmet } from "react-helmet";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isDarkAtome } from "../atoms";
 
 const Title = styled.h1`
