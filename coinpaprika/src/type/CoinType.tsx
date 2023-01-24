@@ -94,3 +94,7 @@ export interface ICoinHistory {
 export interface IToogleClick {
   toggleDark?: () => void;
 }
+
+export interface ICoinChart {
+  coinId: string;
+}
